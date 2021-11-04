@@ -18,6 +18,11 @@ public class Main {
 
     }
 
+    public static void mainMenu() {
+        System.out.println("Welcome to Carly's Bookstore!");
+
+    }
+
     //Initializes needed tables in the database (if they aren't already)
     public static void createTables() throws SQLException {
         Statement statement = connection.createStatement();
@@ -27,7 +32,7 @@ public class Main {
         }
 
         if(!tableExists("users")) {
-            String createUsers = "CREATE TABLE users (userID INTEGER PRIMARY KEY AUTO_INCREMENT, firstName VARCHAR(50), lastName VARCHAR(50), userName VARCHAR(50), password VARCHAR(50));";
+            String createUsers = "CREATE TABLE users (userID INTEGER PRIMARY KEY AUTO_INCREMENT, firstName VARCHAR(50), lastName VARCHAR(50), username VARCHAR(50), password VARCHAR(50));";
             statement.executeUpdate(createUsers);
         }
     }
