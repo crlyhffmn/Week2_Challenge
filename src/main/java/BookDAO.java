@@ -8,9 +8,9 @@ public interface BookDAO {
 
     void deleteBook(int id) throws SQLException;
 
-    List<User> getBooks() throws SQLException;
+    List<Book> getBooks() throws SQLException;
 
-    User getBookById(int id) throws SQLException;
+    Book getBookById(int id) throws SQLException;
 
-    User getBookByTitle(String bookTitle) throws SQLException;
+    Book getBookByTitle(String bookTitle) throws SQLException;
 }
