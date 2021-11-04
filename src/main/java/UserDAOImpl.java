@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(User user) throws SQLException {
-        String sql = "update users set firstName = ?, lastName = ?, userName = ?, password = ? where userID = ?";
+        String sql = "update users set firstName = ?, lastName = ?, username = ?, password = ? where userID = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, user.getFirstName());
         preparedStatement.setString(2, user.getLastName());
@@ -96,7 +96,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByUsername(String username) throws SQLException {
         User user = new User();
-        String sql = "select * from users where userName = \"" + username + "\";";
+        String sql = "select * from users where username = \"" + username + "\";";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         resultSet.next();
