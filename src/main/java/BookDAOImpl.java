@@ -14,7 +14,7 @@ public class BookDAOImpl implements BookDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, book.getTitle());
         preparedStatement.setString(2, book.getAuthor());
-        preparedStatement.setInt(3, book.getISBN());
+        preparedStatement.setString(3, book.getISBN());
         preparedStatement.setInt(4, book.getPrice());
         preparedStatement.setString(5, book.getCategory());
         preparedStatement.setString(6, book.getDescription());
@@ -31,7 +31,7 @@ public class BookDAOImpl implements BookDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, book.getTitle());
         preparedStatement.setString(2, book.getAuthor());
-        preparedStatement.setInt(3, book.getISBN());
+        preparedStatement.setString(3, book.getISBN());
         preparedStatement.setInt(4, book.getPrice());
         preparedStatement.setString(5, book.getCategory());
         preparedStatement.setString(6, book.getDescription());
@@ -66,7 +66,7 @@ public class BookDAOImpl implements BookDAO {
             int id = resultSet.getInt(1);
             String title = resultSet.getString(2);
             String author = resultSet.getString(3);
-            int isbn = resultSet.getInt(4);
+            String isbn = resultSet.getString(4);
             int price = resultSet.getInt(5);
             String category = resultSet.getString(6);
             String description = resultSet.getString(7);
@@ -87,7 +87,7 @@ public class BookDAOImpl implements BookDAO {
             int id = resultSet.getInt(1);
             String title = resultSet.getString(2);
             String author = resultSet.getString(3);
-            int isbn = resultSet.getInt(4);
+            String isbn = resultSet.getString(4);
             int price = resultSet.getInt(5);
             String category = resultSet.getString(6);
             String description = resultSet.getString(7);
@@ -110,7 +110,7 @@ public class BookDAOImpl implements BookDAO {
             int id = resultSet.getInt(1);
             String title = resultSet.getString(2);
             String author = resultSet.getString(3);
-            int isbn = resultSet.getInt(4);
+            String isbn = resultSet.getString(4);
             int price = resultSet.getInt(5);
             String category = resultSet.getString(6);
             String description = resultSet.getString(7);
@@ -120,5 +120,25 @@ public class BookDAOImpl implements BookDAO {
             return null;
         }
         return book;
+    }
+
+    @Override
+    public List<Book> getBooksByCategory(String category) throws SQLException {
+        List<Book> books = new ArrayList<>();
+        String sql = "select * from books where category = \'" + category + "\';";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        while(resultSet.next()) {
+            int id = resultSet.getInt(1);
+            String title = resultSet.getString(2);
+            String author = resultSet.getString(3);
+            String isbn = resultSet.getString(4);
+            int price = resultSet.getInt(5);
+            String cat = resultSet.getString(6);
+            String description = resultSet.getString(7);
+            Book book = new Book(id, title, author, isbn, price, cat, description);
+            books.add(book);
+        }
+        return books;
     }
 }

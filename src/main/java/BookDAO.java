@@ -13,4 +13,6 @@ public interface BookDAO {
     Book getBookById(int id) throws SQLException;
 
     Book getBookByTitle(String bookTitle) throws SQLException;
+
+    List<Book> getBooksByCategory(String category) throws SQLException;
 }

@@ -2,6 +2,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -9,6 +11,7 @@ public class Main {
     private static Scanner scanner;
     private static UserDAO uDAO = DAOFactory.getUserDAO();
     private static BookDAO bDAO = DAOFactory.getBookDAO();
+    private static List<Book> cart;
 
     public static void main(String[] args) throws SQLException {
         //Create tables
@@ -43,10 +46,11 @@ public class Main {
             case 3: //Quit
                 break;
             default: //Invalid
-                System.out.println("You have entered an invalid value. Redirecting to login screen...");
+                System.out.println("You have entered an invalid value. Redirecting to option menu...");
                 System.out.println("Press Enter to continue");
                 try{System.in.read();}
                 catch(Exception e3){}
+                startScreen();
                 break;
         }
     }
@@ -70,12 +74,185 @@ public class Main {
             System.out.print("Password: ");
             pass = scanner.nextLine();
         }
+        System.out.println("Welcome " + user.getFirstName() + "!");
+        cart = new ArrayList<>();
         mainMenu(user);
     }
 
-    public static void mainMenu(User currentUser) {
-        System.out.println("Welcome back " + currentUser.getFirstName() + "!");
+    public static void mainMenu(User currentUser) throws SQLException {
+        List<Book> listOfBooks;
+        System.out.println("Here is a list of book categories to browse and account actions: ");
+        System.out.println("1: Fiction\n2: Non-Fiction\n3: Historical Fiction\n4: Science Fiction\n5: Self Help\n6: Horror\n7: Cookbooks\n8: Comic Books & Manga\n9: View Cart\n10: Check Out\n11 Log out\nPlease enter the number of the category you would like to browse or the action you would like to perform: ");
+        int choice = 0;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            System.out.println("You have entered an invalid value. Please enter an integer from 1 to 9.");
+            System.out.println("Press Enter to continue");
+            try{System.in.read();}
+            catch(Exception e2){}
+        }
+        switch (choice) {
+            case 1: //Fiction
+                listOfBooks = bDAO.getBooksByCategory("Fiction");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Fiction", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 2: //Non-fiction
+                listOfBooks = bDAO.getBooksByCategory("Non-Fiction");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Non-Fiction", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 3: //Historical fiction
+                listOfBooks = bDAO.getBooksByCategory("Historical Fiction");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Historical Fiction", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 4: //Science fiction
+                listOfBooks = bDAO.getBooksByCategory("Science Fiction");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Science Fiction", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 5: //Self help
+                listOfBooks = bDAO.getBooksByCategory("Self Help");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Self Help", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 6: //Horror
+                listOfBooks = bDAO.getBooksByCategory("Horror");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Horror", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 7: //Cookbooks
+                listOfBooks = bDAO.getBooksByCategory("Cookbooks");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Cookbooks", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 8: //Comic books and Manga
+                listOfBooks = bDAO.getBooksByCategory("Comics & Manga");
+                for(Book b : listOfBooks) {
+                    System.out.println(b);
+                }
+                chooseBook("Comics & Manga", currentUser);
+                mainMenu(currentUser);
+                break;
+            case 9: //View Cart
+                System.out.println("Cart Contents: ");
+                for(Book b : cart) {
+                    System.out.println(b);
+                }
+                System.out.println("Press Enter to continue");
+                try{System.in.read();}
+                catch(Exception e2){}
+                mainMenu(currentUser);
+                break;
+            case 10: //Check Out
+                System.out.println("Cart Contents: ");
+                for(Book b : cart) {
+                    System.out.println(b);
+                }
+                System.out.println("Options: \n1: Buy All\n2: Remove Item(s) From Cart");
+                int choice2 = 0;
+                try {
+                    choice2 = Integer.parseInt(scanner.nextLine());
+                } catch (Exception e) {
+                    System.out.println("You have entered an invalid value. Please enter an integer from 1 to 2.");
+                    System.out.println("Press Enter to continue");
+                    try{System.in.read();}
+                    catch(Exception e2){}
+                }
+                switch (choice2) {
+                    case 1:
+                        for(Book b : cart){
+                            System.out.println("Taking book: \'" + b.getTitle() + "\' off of the shelf...");
+                            bDAO.deleteBook(b.getId());
+                        }
+                        cart = new ArrayList<>();
+                        System.out.println("Thank you for your patronage!");
+                        mainMenu(currentUser);
+                        break;
+                    case 2:
+                        System.out.println("Please enter the ID of the book you would like to remove from your cart: ");
+                        int choice3 = 0;
+                        try {
+                            choice3 = Integer.parseInt(scanner.nextLine());
+                        } catch (Exception e) {
+                            System.out.println("You have entered an invalid value.");
+                            System.out.println("Press Enter to continue");
+                            try{System.in.read();}
+                            catch(Exception e2){}
+                        }
+                        int removed = 0;
+                        for(Book b : cart) {
+                            if(choice3 == b.getId()) {
+                                System.out.println("Book: \'" + b.getTitle() + "\' has been removed from your cart.");
+                                cart.remove(b);
+                            }
+                        }
+                        break;
+                    default:
+                        System.out.println("You have entered an invalid value.");
+                        break;
+                }
+                mainMenu(currentUser);
+                break;
+            case 11: //Log out
+                startScreen();
+                break;
+            default: //Invalid
+                System.out.println("You have entered an invalid value. Redirecting to option menu...");
+                System.out.println("Press Enter to continue");
+                try{System.in.read();}
+                catch(Exception e3){}
+                mainMenu(currentUser);
+                break;
+        }
+    }
 
+    public static void chooseBook(String category, User user) throws SQLException {
+        System.out.println("\nIf there is a book you would like here, enter its ID to add it to your cart:\nID: ");
+        int choice = 0;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            System.out.println("You have entered an invalid value. Please enter an integer from 1 to 9.");
+            System.out.println("Press Enter to continue");
+            try{System.in.read();}
+            catch(Exception e2){}
+        }
+        Book chosenBook = bDAO.getBookById(choice);
+        if(chosenBook.getCategory().equals(category)) {
+            //Add to cart
+            cart.add(chosenBook);
+            System.out.println(chosenBook.getTitle() + " has been added to your cart!");
+            System.out.println("Press Enter to continue");
+            try{System.in.read();}
+            catch(Exception e3){}
+        } else {
+            System.out.println("The ID you have entered is either invalid, or from a different category. ");
+        }
+        mainMenu(user);
     }
 
     public static void createAccount() throws SQLException {
@@ -118,7 +295,7 @@ public class Main {
     public static void createTables() throws SQLException {
         Statement statement = connection.createStatement();
         if(!tableExists("books")) {
-            String createEmp = "CREATE TABLE books (bookID INTEGER PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50), author VARCHAR(100), isbn INTEGER, price INTEGER, category VARCHAR(50), description VARCHAR(500));";
+            String createEmp = "CREATE TABLE books (bookID INTEGER PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50), author VARCHAR(100), isbn CHAR(13), price INTEGER, category VARCHAR(50), description VARCHAR(500));";
             statement.executeUpdate(createEmp);
         }
 

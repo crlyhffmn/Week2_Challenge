@@ -2,14 +2,14 @@ public class Book {
     private int id;
     private String title;
     private String author;
-    private int ISBN;
+    private String ISBN;
     private int price;
     private String category;
     private String description;
 
     public Book() {   }
 
-    public Book(int id, String title, String author, int ISBN, int price, String category, String description) {
+    public Book(int id, String title, String author, String ISBN, int price, String category, String description) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -45,11 +45,11 @@ public class Book {
         this.author = author;
     }
 
-    public int getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(int ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 
@@ -75,5 +75,18 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "ID: " + id +
+                ", Title: " + title +
+                ", Author: " + author +
+                ", ISBN: " + ISBN +
+                ", Price: $" + price +
+                ", Category: " + category +
+                ", Description: " + description +
+                "}";
     }
 }

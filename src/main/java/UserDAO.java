@@ -13,4 +13,5 @@ public interface UserDAO {
     User getUserById(int id) throws SQLException;
 
     User getUserByUsername(String username) throws SQLException;
+
 }
