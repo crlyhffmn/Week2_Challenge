@@ -82,7 +82,7 @@ public class Main {
     public static void mainMenu(User currentUser) throws SQLException {
         List<Book> listOfBooks;
         System.out.println("Here is a list of book categories to browse and account actions: ");
-        System.out.println("1: Fiction\n2: Non-Fiction\n3: Historical Fiction\n4: Science Fiction\n5: Self Help\n6: Horror\n7: Cookbooks\n8: Comic Books & Manga\n9: View Cart\n10: Check Out\n11 Log out\nPlease enter the number of the category you would like to browse or the action you would like to perform: ");
+        System.out.println("1: Fiction\n2: Non-Fiction\n3: Historical Fiction\n4: Science Fiction\n5: Self Help\n6: Horror\n7: Cookbooks\n8: Comic Books & Manga\n9: View Cart\n10: Check Out\n11: Log out\nPlease enter the number of the category you would like to browse or the action you would like to perform: ");
         int choice = 0;
         try {
             choice = Integer.parseInt(scanner.nextLine());
@@ -189,7 +189,7 @@ public class Main {
                             bDAO.deleteBook(b.getId());
                         }
                         cart = new ArrayList<>();
-                        System.out.println("Thank you for your patronage!");
+                        System.out.println("Thank you for your patronage!\n");
                         mainMenu(currentUser);
                         break;
                     case 2:
@@ -203,13 +203,18 @@ public class Main {
                             try{System.in.read();}
                             catch(Exception e2){}
                         }
-                        int removed = 0;
+                        Book remove = null;
                         for(Book b : cart) {
                             if(choice3 == b.getId()) {
                                 System.out.println("Book: \'" + b.getTitle() + "\' has been removed from your cart.");
-                                cart.remove(b);
+                                remove = b;
+                                System.out.println("Press Enter to continue");
+                                try{System.in.read();}
+                                catch(Exception e2){}
                             }
                         }
+                        if(remove != null)
+                            cart.remove(remove);
                         break;
                     default:
                         System.out.println("You have entered an invalid value.");
@@ -288,14 +293,14 @@ public class Main {
         System.out.println("Press Enter to continue");
         try{System.in.read();}
         catch(Exception e){}
-        mainMenu(addedUser);
+        loginScreen();
     }
 
     //Initializes needed tables in the database (if they aren't already)
     public static void createTables() throws SQLException {
         Statement statement = connection.createStatement();
         if(!tableExists("books")) {
-            String createEmp = "CREATE TABLE books (bookID INTEGER PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50), author VARCHAR(100), isbn CHAR(13), price INTEGER, category VARCHAR(50), description VARCHAR(500));";
+            String createEmp = "CREATE TABLE books (bookID INTEGER PRIMARY KEY AUTO_INCREMENT, title VARCHAR(50), author VARCHAR(100), isbn CHAR(13) UNIQUE, price INTEGER, category VARCHAR(50), description VARCHAR(500));";
             statement.executeUpdate(createEmp);
         }
 
